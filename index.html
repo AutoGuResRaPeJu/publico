@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <!--Import Google Icon Font-->
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!--Import materialize.css-->
+   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+ 
+   <!--Let browser know website is optimized for mobile-->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>Painel Administrativo</title>
+ </head>
+ 
+ <body>
+ 
+    <table>
+        <thead>
+            <tr>
+            <th>ID</th> 
+            <th aria-colspan="2">NOME DO COMPONENTE</th>
+            <th>CÔMODO</th>
+            <th>TIPO</th>
+            <th>EDITAR</th>
+            <th>DELETAR</th>
+           </tr>
+        </thead>
+        <tbody id="tabela">
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="6">
+                   <a class="waves-effect waves-light btn modal-trigger"  href="#modal-criacao">
+                       CRIAR USUARIO
+                   </a>
+               </td>
+            </tr>
+        </tfoot>
+ 
+    </table>
+ 
+ 
+ <!-- Modal Structure -->
+ <div id="modal-edicao" class="modal">
+   <div class="modal-content">
+           <div class="row">
+             <form id="form-edicao" class="col s12">
+                 <input type="hidden" id="ed-rm" name="rm" />
+                     <div class="row container">
+                       <div class="input-field col s12">
+                               <input placeholder="Placeholder" id="ed-comp" name="comp" type="text" class="validate">
+                               <label for="comp">Nome do Componente</label>
+                       </div>
+                       <div class="input-field col s12">
+                               <input placeholder="Placeholder" id="ed-com" name="com" type="text" class="validate">
+                               <label for="com">Cômodo</label>
+                       </div> 
+                       <div class="input-field col s12">
+                        <input placeholder="Placeholder" id="ed-tipo" name="tipo" type="text" class="validate">
+                        <label for="tipo">Tipo</label>
+                       </div>                    
+               </div>
+           </form>
+       </div>
+   </div>
+   <div class="modal-footer">
+           <a onclick="editarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
+   </div>
+ </div>
+ 
+ 
+ <!-- Modal Structure -->
+ <div id="modal-criacao" class="modal">
+       <div class="modal-content">
+               <div class="row">
+                 <form id="form-criacao" class="col s12">
+                         <div class="row container">
+                           <div class="input-field col s12">
+                             <input placeholder="Placeholder" id="cr-rm" name="rm" type="text" class="validate">
+                             <label for="rm">RM</label>
+                           </div>
+                           <div class="input-field col s12">
+                                   <input placeholder="Placeholder" id="cr-nome" name="nome" type="text" class="validate">
+                                   <label for="nome">Nome</label>
+                           </div>
+                           <div class="input-field col s12">
+                                   <input placeholder="Placeholder" id="cr-tipo" name="tipo" type="text" class="validate">
+                                   <label for="tipo">tipo</label>
+                           </div>                       
+                   </div>
+               </form>
+           </div>
+       </div>
+       <div class="modal-footer">
+               <a onclick="criarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR USUARIO</a>
+       </div>
+     </div>
+ 
+     <!-- Modal Structure -->
+ <div id="modal-delecao" class="modal">
+       <div class="modal-content">
+          <h5>Confirmar Deleção do Usuário</h5>
+       </div>
+       <form id="form-delecao">
+           <input type="hidden" name="rm" id="dl-rm"  />
+       </form>
+       <div class="modal-footer">
+               <a href="#!" class="modal-close waves-effect btn-flat">NÃO</a>
+               <a onclick="deletarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
+       </div>
+   </div>
+ 
+ 
+   <!--JavaScript at end of body for optimized loading-->
+   <script type="text/javascript" src="js/materialize.min.js"></script>
+   <script>
+        let modalCriacao = null;
+        let modalEdicao = null;
+        document.addEventListener('DOMContentLoaded', function() {
+           var elems = document.querySelectorAll('.modal');
+           var instances = M.Modal.init(elems, {});
+            modalEdicao = instances[0];
+            modalCriacao = instances[1];
+            modalDelecao = instances[2];
+       });
+   </script>
+   <script>
+     let listaDeUsuarios = [];
+     listaDeUsuarios.push({rm: 28984, nome: 'Raquel Jesus', tipo: 'Informática'  });
+     listaDeUsuarios.push({rm: 31055, nome: 'Felipe Chapeu', tipo: 'Informática'  });
+     let tabela = document.getElementById('tabela');
+     function mostraModal(i){
+         modalEdicao.open();
+         document.getElementById('ed-rm').value = listaDeUsuarios[i].rm;
+         document.getElementById('ed-nome').value = listaDeUsuarios[i].nome;
+         document.getElementById('ed-tipo').value = listaDeUsuarios[i].tipo;
+     }
+     function mostraModalDelecao(i){
+         modalDelecao.open();
+         document.getElementById('dl-rm').value = listaDeUsuarios[i].rm;
+     }
+     function atualiza(){
+       fetch('/usuarios')
+       .then(res => res.json())
+       .then(dados => {
+           listaDeUsuarios = dados;
+           tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
+           <tr>
+                   <td>${usuario.rm}</td>
+                   <td>${usuario.nome}</td>
+                   <td>${usuario.tipo}</td>
+                   <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
+                   <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
+               </tr>
+           `).join('');
+       });
+     }
+     atualiza();
+ 
+ 
+   function criarUsuario(){
+       const formulario = document.getElementById("form-criacao");
+       const data = new URLSearchParams(new FormData(formulario));
+       fetch('/usuarios', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+           body: data
+       })
+   }
+  
+   function editarUsuario(){
+       const formulario = document.getElementById("form-edicao");
+       const data = new URLSearchParams(new FormData(formulario));
+       fetch('/usuarios', {
+           method: 'PUT',
+           headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+           body: data
+       })
+   }
+  
+   function deletarUsuario(){
+       const rm = document.getElementById('dl-rm').value;
+       fetch('/usuarios/'+ rm, {
+           method: 'DELETE'
+       })
+   }
+ 
+ 
+   </script>
+ </body>
+</html>
