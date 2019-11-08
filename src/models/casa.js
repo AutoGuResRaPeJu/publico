@@ -5,10 +5,10 @@ class Casa {
         return 'tb_casa';
     }
     constructor(objCasa){
-        this.rm = '';
-        this.nome = '';
-        this.curso = '';
-        this.senha = '';
+        this.CASA_ID = '';
+        this.LONGITUDE = '';
+        this.LATITUDE = '';
+        this.DESCRICAO_CASA = '';
         Object.assign(this, objCasa);
     }
 

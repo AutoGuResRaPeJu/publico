@@ -1,14 +1,19 @@
 const Utils = require('../helpers/utils');
 
-class Componentes {
+class Usuario {
     static get tabela(){
         return 'tb_usuarios';
     }
     constructor(objUsuario){
-        this.rm = '';
-        this.nome = '';
-        this.curso = '';
-        this.senha = '';
+        this.USER_ID = '';
+        this.USER_TIPO = '';
+        this.USER_DEFICIENCIA = '';
+        this.USER_NOME = '';
+        this.USER_IDADE = '';
+        this.RUA = '';
+        this.BAIRRO = '';
+        this.CIDADE = '';
+        this.UF = '';
         Object.assign(this, objUsuario);
     }
 
