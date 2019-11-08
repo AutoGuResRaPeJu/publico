@@ -9,6 +9,12 @@
    <!--Let browser know website is optimized for mobile-->
    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
    <title>Painel Administrativo</title>
+   <style>
+   th, td {
+    color: #4682B4;
+   }
+   
+   </style>
  </head>
  
  <body>
@@ -17,7 +23,7 @@
         <thead>
             <tr>
             <th>ID</th> 
-            <th aria-colspan="2">NOME DO COMPONENTE</th>
+            <th>NOME DO COMPONENTE</th>
             <th>CÔMODO</th>
             <th>TIPO</th>
             <th>EDITAR</th>
@@ -29,8 +35,8 @@
         <tfoot>
             <tr>
                <td colspan="6">
-                   <a class="waves-effect waves-light btn modal-trigger"  href="#modal-criacao">
-                       CRIAR USUARIO
+                   <a class="waves-effect waves-light btn modal-trigger"  href="#modal-criacao" id="botao">
+                       CRIAR casa
                    </a>
                </td>
             </tr>
@@ -44,15 +50,15 @@
    <div class="modal-content">
            <div class="row">
              <form id="form-edicao" class="col s12">
-                 <input type="hidden" id="ed-rm" name="rm" />
+                 <input type="hidden" id="ed-id" name="id" />
                      <div class="row container">
                        <div class="input-field col s12">
-                               <input placeholder="Placeholder" id="ed-comp" name="comp" type="text" class="validate">
-                               <label for="comp">Nome do Componente</label>
+                               <input placeholder="Placeholder" id="ed-componente" name="componente" type="text" class="validate">
+                               <label for="componente">Nome do Componente</label>
                        </div>
                        <div class="input-field col s12">
-                               <input placeholder="Placeholder" id="ed-com" name="com" type="text" class="validate">
-                               <label for="com">Cômodo</label>
+                               <input placeholder="Placeholder" id="ed-comodo" name="comodo" type="text" class="validate">
+                               <label for="comodo">Cômodo</label>
                        </div> 
                        <div class="input-field col s12">
                         <input placeholder="Placeholder" id="ed-tipo" name="tipo" type="text" class="validate">
@@ -63,7 +69,7 @@
        </div>
    </div>
    <div class="modal-footer">
-           <a onclick="editarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
+           <a onclick="editarCasa()" href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
    </div>
  </div>
  
@@ -75,23 +81,27 @@
                  <form id="form-criacao" class="col s12">
                          <div class="row container">
                            <div class="input-field col s12">
-                             <input placeholder="Placeholder" id="cr-rm" name="rm" type="text" class="validate">
-                             <label for="rm">RM</label>
+                             <input placeholder="Placeholder" id="cr-id" name="id" type="text" class="validate">
+                             <label for="id">ID</label>
                            </div>
                            <div class="input-field col s12">
-                                   <input placeholder="Placeholder" id="cr-nome" name="nome" type="text" class="validate">
-                                   <label for="nome">Nome</label>
+                                   <input placeholder="Placeholder" id="cr-componente" name="componente" type="text" class="validate">
+                                   <label for="componente">COMPONENTE</label>
                            </div>
+                           <div class="input-field col s12">
+                            <input placeholder="Placeholder" id="cr-comodo" name="comodo" type="text" class="validate">
+                            <label for="comodo">COMODO</label>
+                            </div>
                            <div class="input-field col s12">
                                    <input placeholder="Placeholder" id="cr-tipo" name="tipo" type="text" class="validate">
-                                   <label for="tipo">tipo</label>
+                                   <label for="tipo">TIPO</label>
                            </div>                       
                    </div>
                </form>
            </div>
        </div>
        <div class="modal-footer">
-               <a onclick="criarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR USUARIO</a>
+               <a onclick="criarCasa()" href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR COMPONENTE</a>
        </div>
      </div>
  
@@ -101,11 +111,11 @@
           <h5>Confirmar Deleção do Usuário</h5>
        </div>
        <form id="form-delecao">
-           <input type="hidden" name="rm" id="dl-rm"  />
+           <input type="hidden" name="id" id="dl-id"  />
        </form>
        <div class="modal-footer">
                <a href="#!" class="modal-close waves-effect btn-flat">NÃO</a>
-               <a onclick="deletarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
+               <a onclick="deletarCasa()" href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
        </div>
    </div>
  
@@ -124,30 +134,32 @@
        });
    </script>
    <script>
-     let listaDeUsuarios = [];
-     listaDeUsuarios.push({rm: 28984, nome: 'Raquel Jesus', tipo: 'Informática'  });
-     listaDeUsuarios.push({rm: 31055, nome: 'Felipe Chapeu', tipo: 'Informática'  });
+     let listaDeCasas = [];
+     listaDeCasas.push({id: 28984, componente: 'Lâmpada', tipo: ''  });
+     listaDeCasas.push({id: 31055, componente: 'Campainha', tipo: ''  });
      let tabela = document.getElementById('tabela');
      function mostraModal(i){
          modalEdicao.open();
-         document.getElementById('ed-rm').value = listaDeUsuarios[i].rm;
-         document.getElementById('ed-nome').value = listaDeUsuarios[i].nome;
-         document.getElementById('ed-tipo').value = listaDeUsuarios[i].tipo;
+         document.getElementById('ed-id').value = listaDeCasas[i].id;
+         document.getElementById('ed-componente').value = listaDeCasas[i].componente;
+         document.getElementById('ed-comodo').value = listaDeCasas[i].comodo;
+         document.getElementById('ed-tipo').value = listaDeCasas[i].tipo;
      }
      function mostraModalDelecao(i){
          modalDelecao.open();
-         document.getElementById('dl-rm').value = listaDeUsuarios[i].rm;
+         document.getElementById('dl-id').value = listaDeCasas[i].id;
      }
      function atualiza(){
-       fetch('/usuarios')
+       fetch('/casas')
        .then(res => res.json())
        .then(dados => {
-           listaDeUsuarios = dados;
-           tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
+           listaDeCasas = dados;
+           tabela.innerHTML = listaDeCasas.map((casa,i) => `
            <tr>
-                   <td>${usuario.rm}</td>
-                   <td>${usuario.nome}</td>
-                   <td>${usuario.tipo}</td>
+                   <td>${casa.id}</td>
+                   <td>${casa.componente}</td>
+                   <td>${casa.comodo}</td>
+                   <td>${casa.tipo}</td>
                    <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
                    <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
                </tr>
@@ -157,29 +169,29 @@
      atualiza();
  
  
-   function criarUsuario(){
+   function criarCasa(){
        const formulario = document.getElementById("form-criacao");
        const data = new URLSearchParams(new FormData(formulario));
-       fetch('/usuarios', {
+       fetch('/casas', {
            method: 'POST',
            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
            body: data
        })
    }
   
-   function editarUsuario(){
+   function editarCasa(){
        const formulario = document.getElementById("form-edicao");
        const data = new URLSearchParams(new FormData(formulario));
-       fetch('/usuarios', {
+       fetch('/casas', {
            method: 'PUT',
            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
            body: data
        })
    }
   
-   function deletarUsuario(){
-       const rm = document.getElementById('dl-rm').value;
-       fetch('/usuarios/'+ rm, {
+   function deletarCasa(){
+       const id = document.getElementById('dl-id').value;
+       fetch('/casas/'+ id, {
            method: 'DELETE'
        })
    }
