@@ -2,8 +2,8 @@
 const AWS = require('aws-sdk');
 
 const credentials={
-    id:"AKIAXIB6BRACSZAPQCTT",
-    secret:"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"
+    id:"id",
+    secret:"BkXbpX6lJ+secret+aA7iy"
 }
 
 // Set region
@@ -13,7 +13,7 @@ AWS.config.secretAccessKey=credentials.secret;
 
 // Create publish parameters
 let params = {
-  Message: 'Aloha', /* required */
+  Message: 'teste de mensagem', /* required */
   PhoneNumber: '+5519981858526',
 };
 
