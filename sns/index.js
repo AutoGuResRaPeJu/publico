@@ -2,8 +2,8 @@
 const AWS = require('aws-sdk');
 
 const credentials={
-    id:"AKIAXIB6BRACSG6VSUPU",
-    secret:"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"
+    id:"id",
+    secret:"BkXbpX6lJ+secret+aA7iy"
 }
 
 // Set region
