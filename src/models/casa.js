@@ -9,7 +9,7 @@ class Casa {
         this.LONGITUDE = '';
         this.LATITUDE = '';
         this.DESCRICAO_CASA = '';
-        Object.assign(this, objCasa);
+        Objec0t.assign(this, objCasa);
     }
 
     setarSenha(senha){
