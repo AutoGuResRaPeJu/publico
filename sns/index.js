@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 
 const credentials={
     id:"id",
-    secret:"BkXbpX6lJ+secret+aA7iy"
+    secret:""
 }
 
 // Set region
@@ -14,7 +14,7 @@ AWS.config.secretAccessKey=credentials.secret;
 // Create publish parameters
 let params = {
   Message: 'teste de mensagem', /* required */
-  PhoneNumber: '+5519981858526',
+  PhoneNumber: '+5519996631020',
 };
 
 // Create promise and SNS service object
