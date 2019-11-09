@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const BancoUtils = require('../helpers/bancoUtils');
-const Usuario = require('../models/usuario');
-const UsuarioDAO = require('../models/usuarioDAO');
+const Casa = require('../models/casa');
+const CasaDAO = require('../models/casaDAO');
 const Utils = require('../helpers/utils');
 const segredo = "AluninhoFeliz";
 const routers = express.Router();
@@ -15,9 +15,9 @@ const upload = multer({
      },
      filename: (req, file, cb) => {
          console.log(req.cookies.token);
-        const usuario = jwt.verify(req.cookies.token, segredo);        
-        console.log(usuario);
-        let customFileName = usuario.rm;
+        const casa = jwt.verify(req.cookies.token, segredo);        
+        console.log(casa);
+        let customFileName = casa.rm;
             fileExtension = file.originalname.split('.')[1] // get file extension from original file name
             cb(null, customFileName + '.' + fileExtension)
          }
@@ -26,9 +26,9 @@ const upload = multer({
 
 
 routers.post('/auth', (req,res) => {
-   const usuario = new Usuario(req.body);
-   usuario.setarSenha(req.body.senha);
-   new UsuarioDAO().buscaPorUsuarioESenha(usuario, (resposta) => {
+   const casa = new Casa(req.body);
+   casa.setarSenha(req.body.senha);
+   new CasaDAO().buscaPorCasaESenha(casa, (resposta) => {
     
     if(resposta.length > 0){
         const token = jwt.sign({ rm: Utils.criptografa('' + resposta[0].rm), nome: resposta[0].nome, nivel: resposta[0].admin }, segredo, {expiresIn: '1h'});
@@ -42,30 +42,30 @@ routers.post('/auth', (req,res) => {
 })
 
 routers.get('/', (req,res) => {
-    BancoUtils.select(Usuario.tabela, (usuarios) => {
-        res.json(usuarios);
+    BancoUtils.select(Casa.tabela, (casas) => {
+        res.json(casas);
     })
    
 });
 
 routers.post('/', (req,res) => {
-    const usuario = new Usuario(req.body);
-    usuario.senha = usuario.senha || "anjinho";
-    usuario.setarSenha(usuario.senha);
-    BancoUtils.insert(usuario, Usuario.tabela, (r) => {
+    const casa = new Casa(req.body);
+    casa.senha = casa.senha || "anjinho";
+    casa.setarSenha(casa.senha);
+    BancoUtils.insert(casa, Casa.tabela, (r) => {
         res.json(r);
     });
 })
 
 routers.put('/', (req,res) => {
-    const usuarioNovo = new Usuario(req.body);
-    BancoUtils.put(usuarioNovo, Usuario.tabela, {key: 'rm', value: usuarioNovo.rm}, (r) => {
+    const casaNova = new Casa(req.body);
+    BancoUtils.put(casaNova, Casa.tabela, {key: 'rm', value: casaNova.rm}, (r) => {
         res.json(r);
     });
 })
 
 routers.delete('/:rm', (req,res) => {
-    BancoUtils.delete(Usuario.tabela, {key: 'rm', value: req.params.rm}, (r) => {
+    BancoUtils.delete(Casa.tabela, {key: 'rm', value: req.params.rm}, (r) => {
         res.json(r);
     });
 })
