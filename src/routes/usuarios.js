@@ -6,7 +6,7 @@ const BancoUtils = require('../helpers/bancoUtils');
 const Casa = require('../models/casa');
 const CasaDAO = require('../models/casaDAO');
 const Utils = require('../helpers/utils');
-const segredo = "AluninhoFeliz";
+const segredo = "TCCCasaInteligente";
 const routers = express.Router();
 const upload = multer({
     storage: multer.diskStorage({
@@ -17,7 +17,7 @@ const upload = multer({
          console.log(req.cookies.token);
         const casa = jwt.verify(req.cookies.token, segredo);        
         console.log(casa);
-        let customFileName = casa.rm;
+        let customFileName = casa.id;
             fileExtension = file.originalname.split('.')[1] // get file extension from original file name
             cb(null, customFileName + '.' + fileExtension)
          }
@@ -31,7 +31,7 @@ routers.post('/auth', (req,res) => {
    new CasaDAO().buscaPorCasaESenha(casa, (resposta) => {
     
     if(resposta.length > 0){
-        const token = jwt.sign({ rm: Utils.criptografa('' + resposta[0].rm), nome: resposta[0].nome, nivel: resposta[0].admin }, segredo, {expiresIn: '1h'});
+        const token = jwt.sign({ id: Utils.criptografa('' + resposta[0].id), nome: resposta[0].nome, nivel: resposta[0].admin }, segredo, {expiresIn: '1h'});
         res.cookie('token', token).redirect('/index');
         //res.json(token);
     } else {       
@@ -59,13 +59,13 @@ routers.post('/', (req,res) => {
 
 routers.put('/', (req,res) => {
     const casaNova = new Casa(req.body);
-    BancoUtils.put(casaNova, Casa.tabela, {key: 'rm', value: casaNova.rm}, (r) => {
+    BancoUtils.put(casaNova, Casa.tabela, {key: 'id', value: casaNova.id}, (r) => {
         res.json(r);
     });
 })
 
-routers.delete('/:rm', (req,res) => {
-    BancoUtils.delete(Casa.tabela, {key: 'rm', value: req.params.rm}, (r) => {
+routers.delete('/:id', (req,res) => {
+    BancoUtils.delete(Casa.tabela, {key: 'id', value: req.params.id}, (r) => {
         res.json(r);
     });
 })
