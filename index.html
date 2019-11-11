@@ -135,8 +135,8 @@
    </script>
    <script>
      let listaDeCasas = [];
-     listaDeCasas.push({id: 28984, componente: 'Lâmpada', tipo: ''  });
-     listaDeCasas.push({id: 31055, componente: 'Campainha', tipo: ''  });
+     listaDeCasas.push({id: 28984, componente: 'Lâmpada', comodo: 'sala de estar', tipo: 'luz'  });
+     listaDeCasas.push({id: 31055, componente: 'Campainha', comodo: 'sala de estar', tipo: 'responsividade'  });
      let tabela = document.getElementById('tabela');
      function mostraModal(i){
          modalEdicao.open();
@@ -150,10 +150,13 @@
          document.getElementById('dl-id').value = listaDeCasas[i].id;
      }
      function atualiza(){
+         /*
        fetch('/casas')
        .then(res => res.json())
        .then(dados => {
+           
            listaDeCasas = dados;
+           */
            tabela.innerHTML = listaDeCasas.map((casa,i) => `
            <tr>
                    <td>${casa.id}</td>
@@ -164,36 +167,50 @@
                    <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
                </tr>
            `).join('');
+           /*
        });
+       */
      }
      atualiza();
  
  
    function criarCasa(){
        const formulario = document.getElementById("form-criacao");
+       /*
        const data = new URLSearchParams(new FormData(formulario));
+       
        fetch('/casas', {
            method: 'POST',
            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
            body: data
        })
+       */
+       listaDeCasas.push(formulario.value);
+       atualiza();
    }
   
    function editarCasa(){
        const formulario = document.getElementById("form-edicao");
        const data = new URLSearchParams(new FormData(formulario));
+       /*
        fetch('/casas', {
            method: 'PUT',
            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
            body: data
        })
+       */
+       
    }
   
    function deletarCasa(){
        const id = document.getElementById('dl-id').value;
+       /*
        fetch('/casas/'+ id, {
            method: 'DELETE'
        })
+       */
+       listaDeCasas.pop();
+       atualiza();
    }
  
  
