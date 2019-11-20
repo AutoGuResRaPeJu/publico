@@ -13,7 +13,7 @@ AWS.config.secretAccessKey=credentials.secret;
 
 // Create publish parameters
 let params = {
-  Message: 'teste de mensagem', /* required */
+  Message: 'Lampada 1 está  ' +data-state, /* required */
   PhoneNumber: '+5519996631020',
 };
 
@@ -32,4 +32,3 @@ function sendSMS() {
     });
 }
 
-sendSMS(params);
